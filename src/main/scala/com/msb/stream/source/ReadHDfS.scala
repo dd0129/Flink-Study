@@ -16,7 +16,7 @@ object ReadHDfS {
     val env = StreamExecutionEnvironment.getExecutionEnvironment
     //    val stream: DataStream[String] = env.readTextFile("hdfs://node01:9000/flink/data/wc")
     //    val filePath = "./data/carId2Name"
-    val filePath = "hdfs://node01:9000/flink/data/"
+    val filePath = "/"
     val format = new TextInputFormat(new Path(filePath))
 
     //readFile  可以设置每隔一段时间去监控某一个目录  或者某一个文件内容

@@ -17,12 +17,13 @@ object WordCount {
       * DataStream：一组相同类型的元素 组成的数据流
       * 如果数据源是scoket  并行度只能是1
       */
-    val initStream:DataStream[String] = env.socketTextStream("node01",8888)
-    val wordStream = initStream.flatMap(_.split(" ")).setParallelism(3)
-    val pairStream = wordStream.map((_,1)).setParallelism(3)
+    val initStream:DataStream[String] = env.socketTextStream("host3",8888)
+//    val wordStream = initStream.flatMap(_.split(" ")).filter(input => input.equals("hello")).setParallelism(3)
+    val wordStream = initStream.flatMap(_.split(" ")).setParallelism(2)
+    val pairStream = wordStream.map((_,1)).setParallelism(2)
     val keyByStream = pairStream.keyBy(0)
-    val restStream = keyByStream.sum(1).setParallelism(3)
-    restStream.print()
+    val restStream = keyByStream.sum(1).setParallelism(2)
+    restStream.print().setParallelism(1)
 
     /**
       * 6> (msb,1)

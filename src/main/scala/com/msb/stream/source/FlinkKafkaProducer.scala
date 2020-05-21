@@ -12,7 +12,7 @@ object FlinkKafkaProducer {
   def main(args: Array[String]): Unit = {
     //配置连接kafka的信息  Properties
     val properties = new Properties()
-    properties.setProperty("bootstrap.servers", "node01:9092,node02:9092,node03:9092")
+    properties.setProperty("bootstrap.servers", "host2:9092,host3:9092,host4:9092")
     properties.setProperty("key.serializer", classOf[StringSerializer].getName)
     properties.setProperty("value.serializer", classOf[StringSerializer].getName)
 

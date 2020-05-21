@@ -1,5 +1,6 @@
 package com.msb.stream.transformation
 
+import org.apache.flink.api.java.DataSet
 import org.apache.flink.api.java.functions.KeySelector
 import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
 import org.apache.flink.streaming.api.scala._
@@ -11,7 +12,7 @@ object MapOperator {
     val env = StreamExecutionEnvironment.getExecutionEnvironment
     //1 to 100
 //    val stream = env.generateSequence(1,100)
-    val stream = env.socketTextStream("node01",8888)
+    val stream = env.socketTextStream("host3",8888)
 
     stream.map(x=>x+"-------")
     //如何使用flatMap 代替 filter
@@ -26,18 +27,17 @@ object MapOperator {
     }).print()*/
 
     //keyBy算子：分流算子  根据用户指定的字段来分组
-    stream
-      .flatMap(_.split(" "))
+    val ds = stream.flatMap(_.split(" "))
         .map((_,1))
 //        .keyBy(new KeySelector[(String,Int),String] {
 //          override def getKey(value: (String, Int)): String = {
 //            value._1
 //          }
-//        })
-      .keyBy(x=>x._1)
-      //flink 去重  怎么做？  流计算
-      .reduce((v1,v2) => (v1._1,v1._2+v2._2))
-      .print()
+//        }).sum(1).print()
+      .keyBy(x=>x._1).sum(1)
+//      //flink 去重  怎么做？  流计算
+//      .reduce((v1,v2) => (v1._1,v1._2+v2._2))
+//      .print()
     env.execute()
   }
 }

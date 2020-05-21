@@ -23,7 +23,7 @@ object CarFlowAnaly {
     //设置连接kafka的配置信息
     val props = new Properties()
     //注意   sparkstreaming + kafka（0.10之前版本） receiver模式  zookeeper url（元数据）
-    props.setProperty("bootstrap.servers","node01:9092,node02:9092,node03:9092")
+    props.setProperty("bootstrap.servers","host2:9092,host3:9092,host4:9092")
     props.setProperty("group.id","flink-kafka-001")
     props.setProperty("key.deserializer",classOf[StringSerializer].getName)
     props.setProperty("value.deserializer",classOf[StringSerializer].getName)
@@ -45,6 +45,7 @@ object CarFlowAnaly {
         createTuple2TypeInformation(createTypeInformation[String], createTypeInformation[String])
       }
     }, props))
+
     //过滤掉key
     val valueStream = stream.map(_._2)
 
@@ -55,7 +56,8 @@ object CarFlowAnaly {
       */
     valueStream.map(data => {
       val splits = data.split("\t")
-      val monitorID = splits(0)
+
+      val monitorID = splits(0)+splits(2).substring(0,16)
       (monitorID,1)
     }).keyBy(x=>x._1)
       .reduce(new ReduceFunction[(String, Int)] {

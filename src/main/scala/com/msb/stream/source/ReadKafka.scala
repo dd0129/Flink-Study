@@ -18,7 +18,7 @@ object ReadKafka {
     //设置连接kafka的配置信息
     val props = new Properties()
     //注意   sparkstreaming + kafka（0.10之前版本） receiver模式  zookeeper url（元数据）
-    props.setProperty("bootstrap.servers","node01:9092,node02:9092,node03:9092")
+    props.setProperty("bootstrap.servers","host2:9092,host3:9092,host4:9092")
     props.setProperty("group.id","flink-kafka-001")
     props.setProperty("key.deserializer",classOf[StringSerializer].getName)
     props.setProperty("value.deserializer",classOf[StringSerializer].getName)
